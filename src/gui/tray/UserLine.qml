@@ -14,6 +14,9 @@ MenuItem {
     Accessible.role: Accessible.MenuItem
     Accessible.name: qsTr("Account entry")
 
+    property variant dialog;
+    property variant comp;
+
     RowLayout {
         id: userLineLayout
         spacing: 0
@@ -188,14 +191,21 @@ MenuItem {
                     radius: 2
                 }
 
+                Window {
+                    id: mywin
+                    width: 200
+                    height: 200
+                }
+
                 MenuItem {
-                    id: setUserStatus
+                    visible: model.isConnected && model.serverHasUserStatus
+                    height: visible ? implicitHeight : 0
                     
                     text: qsTr("Set status")
                     font.pixelSize: Style.topLinePixelSize
                     hoverEnabled: true
                     onClicked: {
-                        UserModel.showSetUserStatusDialog(index)
+                        UserModel.showUserStatusSelectorDialog(index)
                         accountMenu.close()
                     }
 
@@ -208,7 +218,6 @@ MenuItem {
                             color: parent.parent.hovered ? Style.lightHover : "transparent"
                         }
                     }
-                    
                 }
 
                 MenuItem {

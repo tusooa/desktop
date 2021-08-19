@@ -13,7 +13,10 @@
 #include "accountmanager.h"
 #include "folderman.h"
 #include "NotificationCache.h"
+#include "userstatusselectormodel.h"
+#include "userstatusconnector.h"
 #include <chrono>
+#include <qobjectdefs.h>
 #include <qquickview.h>
 
 namespace OCC {
@@ -159,7 +162,7 @@ public:
     Q_INVOKABLE void login(const int &id);
     Q_INVOKABLE void logout(const int &id);
     Q_INVOKABLE void removeAccount(const int &id);
-    Q_INVOKABLE void showSetUserStatusDialog(const int &id);
+    Q_INVOKABLE void showUserStatusSelectorDialog(const int &id);
 
     ActivityListModel *currentActivityModel();
 

@@ -12,9 +12,8 @@
  * for more details.
  */
 
-#include <QByteArray>
-#include <QDebug>
 #include <QtGlobal>
+#include <memory>
 
 #include "emojimodel.h"
 
@@ -23,7 +22,7 @@ namespace OCC {
 QVariant EmojiCategoriesModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
 
     switch (role) {
@@ -34,13 +33,12 @@ QVariant EmojiCategoriesModel::data(const QModelIndex &index, int role) const
         return categories[index.row()].label;
     }
 
-    Q_UNREACHABLE();
+    return {};
 }
 
 int EmojiCategoriesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-
     return static_cast<int>(categories.size());
 }
 

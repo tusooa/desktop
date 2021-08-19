@@ -22,25 +22,17 @@ import com.nextcloud.desktopclient 1.0 as NC
 ColumnLayout {
     id: rootLayout
     spacing: 0
-    property NC.SetUserStatusDialogModel setUserStatusDialogModel
-
-    Connections {
-        target: setUserStatusDialogModel
-        function onShowError() {
-            errorDialog.open()
-        }
-    }
+    property NC.UserStatusSelectorModel userStatusSelectorModel
 
     FontMetrics {
         id: metrics
     }
 
-    Item {
-        Layout.margins: 8
-    }
-
     Text {
-        Layout.margins: 8
+        Layout.topMargin: 16
+        Layout.leftMargin: 8
+        Layout.rightMargin: 8
+        Layout.bottomMargin: 8
         Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
         font.bold: true
         text: qsTr("Online status")
@@ -56,67 +48,69 @@ ColumnLayout {
 
         Button {
             Layout.fillWidth: true
-            checked: NC.UserStatus.Online == setUserStatusDialogModel.onlineStatus
+            checked: NC.UserStatus.Online == userStatusSelectorModel.onlineStatus
             checkable: true
-            icon.source: setUserStatusDialogModel.onlineIcon
+            icon.source: userStatusSelectorModel.onlineIcon
             icon.color: "transparent"
             text: qsTr("Online")
-            onClicked: setUserStatusDialogModel.setOnlineStatus(NC.UserStatus.Online)
+            onClicked: userStatusSelectorModel.setOnlineStatus(NC.UserStatus.Online)
             implicitWidth: 100
         }
         Button {
             Layout.fillWidth: true
-            checked: NC.UserStatus.Away == setUserStatusDialogModel.onlineStatus
+            checked: NC.UserStatus.Away == userStatusSelectorModel.onlineStatus
             checkable: true
-            icon.source: setUserStatusDialogModel.awayIcon
+            icon.source: userStatusSelectorModel.awayIcon
             icon.color: "transparent"
             text: qsTr("Away")
-            onClicked: setUserStatusDialogModel.setOnlineStatus(NC.UserStatus.Away)
+            onClicked: userStatusSelectorModel.setOnlineStatus(NC.UserStatus.Away)
             implicitWidth: 100
             
         }
         Button {
             Layout.fillWidth: true
-            checked: NC.UserStatus.DoNotDisturb == setUserStatusDialogModel.onlineStatus
+            checked: NC.UserStatus.DoNotDisturb == userStatusSelectorModel.onlineStatus
             checkable: true
-            icon.source: setUserStatusDialogModel.dndIcon
+            icon.source: userStatusSelectorModel.dndIcon
             icon.color: "transparent"
             text: qsTr("Do not disturb")
-            onClicked: setUserStatusDialogModel.setOnlineStatus(NC.UserStatus.DoNotDisturb)
+            onClicked: userStatusSelectorModel.setOnlineStatus(NC.UserStatus.DoNotDisturb)
             implicitWidth: 100
         }
         Button {
             Layout.fillWidth: true
-            checked: NC.UserStatus.Invisible == setUserStatusDialogModel.onlineStatus
+            checked: NC.UserStatus.Invisible == userStatusSelectorModel.onlineStatus
             checkable: true
-            icon.source: setUserStatusDialogModel.invisibleIcon
+            icon.source: userStatusSelectorModel.invisibleIcon
             icon.color: "transparent"
             text: qsTr("Invisible")
-            onClicked: setUserStatusDialogModel.setOnlineStatus(NC.UserStatus.Invisible)
+            onClicked: userStatusSelectorModel.setOnlineStatus(NC.UserStatus.Invisible)
             implicitWidth: 100
         }
     }
 
-    Item {
-        Layout.margins: 8
-    }
-
     Text {
-        Layout.margins: 8
+        Layout.topMargin: 16
+        Layout.leftMargin: 8
+        Layout.rightMargin: 8
+        Layout.bottomMargin: 8
         Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
         font.bold: true
         text: qsTr("Status message")
     }
 
     RowLayout {
-        Layout.margins: 8
+        Layout.topMargin: 8
+        Layout.leftMargin: 8
+        Layout.rightMargin: 8
+        Layout.bottomMargin: 16
         Layout.alignment: Qt.AlignTop
         Layout.fillWidth: true
 
         Button {
             Layout.preferredWidth: metrics.height * 2
             Layout.preferredHeight: metrics.height * 2
-            text: setUserStatusDialogModel.userStatusEmoji
+            text: userStatusSelectorModel.userStatusEmoji
             onClicked: emojiDialog.open()
         }
 
@@ -131,7 +125,7 @@ ColumnLayout {
                 id: emojiPicker
 
                 onChosen: {
-                    setUserStatusDialogModel.userStatusEmoji = emoji
+                    userStatusSelectorModel.userStatusEmoji = emoji
                     emojiDialog.close()
                 }
             }
@@ -140,35 +134,29 @@ ColumnLayout {
         TextField {
             Layout.fillWidth: true
             placeholderText: qsTr("What is your Status?")
-            text: setUserStatusDialogModel.userStatusMessage
-            onEditingFinished: setUserStatusDialogModel.setUserStatusMessage(text)
+            text: userStatusSelectorModel.userStatusMessage
+            onEditingFinished: userStatusSelectorModel.setUserStatusMessage(text)
         }
     }
 
-    ColumnLayout {
-        Layout.margins: 8
-        Layout.alignment: Qt.AlignTop
+    Repeater {
+        model: userStatusSelectorModel.predefinedStatusesCount
 
-        Repeater {
-            model: setUserStatusDialogModel.predefinedStatusesCount
-
-            Button {
-                id: control
-                Layout.fillWidth: true
-                flat: !hovered
-                hoverEnabled: true
-                text: setUserStatusDialogModel.predefinedStatus(index).icon + " <b>" + setUserStatusDialogModel.predefinedStatus(index).message + "</b> - " + setUserStatusDialogModel.predefinedStatusClearAt(index)
-                onClicked: setUserStatusDialogModel.setPredefinedStatus(index)
-            }
+        Button {
+            id: control
+            Layout.fillWidth: true
+            flat: !hovered
+            hoverEnabled: true
+            text: userStatusSelectorModel.predefinedStatus(index).icon + " <b>" + userStatusSelectorModel.predefinedStatus(index).message + "</b> - " + userStatusSelectorModel.predefinedStatusClearAt(index)
+            onClicked: userStatusSelectorModel.setPredefinedStatus(index)
         }
-    }
-
-    Item {
-        Layout.margins: 8
     }
 
    RowLayout {
-       Layout.margins: 8
+       Layout.topMargin: 16
+       Layout.leftMargin: 8
+       Layout.rightMargin: 8
+       Layout.bottomMargin: 8
        Layout.alignment: Qt.AlignTop
 
        Text {
@@ -177,9 +165,9 @@ ColumnLayout {
 
        ComboBox {
            Layout.fillWidth: true
-           model: setUserStatusDialogModel.clearAtStages
-           displayText: setUserStatusDialogModel.clearAt
-           onActivated: setUserStatusDialogModel.setClearAt(index)
+           model: userStatusSelectorModel.clearAtValues
+           displayText: userStatusSelectorModel.clearAt
+           onActivated: userStatusSelectorModel.setClearAt(index)
        }
    }
 
@@ -190,21 +178,21 @@ ColumnLayout {
         Button {
             Layout.fillWidth: true
             text: qsTr("Clear status message")
-            onClicked: setUserStatusDialogModel.clearUserStatus()
+            onClicked: userStatusSelectorModel.clearUserStatus()
         }
         Button {
             highlighted: true
             Layout.fillWidth: true
             text: qsTr("Set status message")
-            onClicked: setUserStatusDialogModel.setUserStatus()
+            onClicked: userStatusSelectorModel.setUserStatus()
         }
     }
 
-    MessageDialog {
-        id: errorDialog
-        icon: StandardIcon.Critical
-        title: qsTr("Set user status")
-        text: setUserStatusDialogModel.errorMessage
-        visible: false
+    ErrorBox {
+        Layout.margins: 8
+        Layout.fillWidth: true
+        
+        visible: userStatusSelectorModel.errorMessage != ""
+        text: "<b>Error:</b> " + userStatusSelectorModel.errorMessage
     }
 }

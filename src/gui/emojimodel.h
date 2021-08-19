@@ -64,21 +64,20 @@ class EmojiCategoriesModel : public QAbstractListModel
 public:
     QVariant data(const QModelIndex &index, int role) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
-protected:
+private:
     enum Roles {
         EmojiRole = 0,
         LabelRole
     };
 
-    QHash<int, QByteArray> roleNames() const override;
-
-private:
     struct Category
     {
         QString emoji;
         QString label;
     };
+
     static const std::vector<Category> categories;
 };
 

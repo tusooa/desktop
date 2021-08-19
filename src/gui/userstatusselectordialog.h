@@ -19,7 +19,7 @@
 #include <QQuickView>
 
 namespace OCC {
-namespace SetUserStatusDialog {
+namespace UserStatusSelectorDialog {
     void show(AccountPtr account);
 }
 }

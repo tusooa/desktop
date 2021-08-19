@@ -42,17 +42,11 @@ public:
 private:
     void onUserStatusFetched(const QJsonDocument &json, int statusCode);
     void onPredefinedStatusesFetched(const QJsonDocument &json, int statusCode);
-    void onUserStatusStateSet(const QJsonDocument &json, int statusCode);
+    void onUserStatusOnlineStatusSet(const QJsonDocument &json, int statusCode);
     void onUserStatusMessageSet(const QJsonDocument &json, int statusCode);
     void onMessageCleared(const QJsonDocument &json, int statusCode);
 
     void logResponse(const QString &message, const QJsonDocument &json, int statusCode);
-
-    void deleteClearMesssageJob();
-    void deleteSetMessageJob();
-    void deleteSetOnlineStatusJob();
-    void deleteGetPredefinedStatusesJob();
-    void deleteGetUserStatusJob();
 
     AccountPtr _account;
 

@@ -29,7 +29,7 @@
 
 namespace OCC {
 
-class SetUserStatusDialogModel : public QObject
+class UserStatusSelectorModel : public QObject
 {
     Q_OBJECT
 
@@ -37,7 +37,7 @@ class SetUserStatusDialogModel : public QObject
     Q_PROPERTY(QString userStatusEmoji READ userStatusEmoji WRITE setUserStatusEmoji NOTIFY userStatusChanged)
     Q_PROPERTY(OCC::UserStatus::OnlineStatus onlineStatus READ onlineStatus WRITE setOnlineStatus NOTIFY onlineStatusChanged)
     Q_PROPERTY(int predefinedStatusesCount READ predefinedStatusesCount NOTIFY predefinedStatusesChanged)
-    Q_PROPERTY(QStringList clearAtStages READ clearAtStages CONSTANT)
+    Q_PROPERTY(QStringList clearAtValues READ clearAtValues CONSTANT)
     Q_PROPERTY(QString clearAt READ clearAt NOTIFY clearAtChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(QUrl onlineIcon READ onlineIcon CONSTANT)
@@ -46,23 +46,23 @@ class SetUserStatusDialogModel : public QObject
     Q_PROPERTY(QUrl invisibleIcon READ invisibleIcon CONSTANT)
 
 public:
-    explicit SetUserStatusDialogModel(QObject *parent = nullptr);
+    explicit UserStatusSelectorModel(QObject *parent = nullptr);
 
-    explicit SetUserStatusDialogModel(std::shared_ptr<UserStatusConnector> userStatusJob,
+    explicit UserStatusSelectorModel(std::shared_ptr<UserStatusConnector> userStatusConnector,
         QObject *parent = nullptr);
 
-    explicit SetUserStatusDialogModel(std::shared_ptr<UserStatusConnector> userStatusJob,
+    explicit UserStatusSelectorModel(std::shared_ptr<UserStatusConnector> userStatusConnector,
         std::unique_ptr<DateTimeProvider> dateTimeProvider,
         QObject *parent = nullptr);
 
-    explicit SetUserStatusDialogModel(const UserStatus &userStatus,
+    explicit UserStatusSelectorModel(const UserStatus &userStatus,
         std::unique_ptr<DateTimeProvider> dateTimeProvider,
         QObject *parent = nullptr);
 
-    explicit SetUserStatusDialogModel(const UserStatus &userStatus,
+    explicit UserStatusSelectorModel(const UserStatus &userStatus,
         QObject *parent = nullptr);
 
-    ~SetUserStatusDialogModel();
+    ~UserStatusSelectorModel();
 
     Q_REQUIRED_RESULT UserStatus::OnlineStatus onlineStatus() const;
     Q_INVOKABLE void setOnlineStatus(OCC::UserStatus::OnlineStatus status);
@@ -85,14 +85,13 @@ public:
     Q_INVOKABLE QString predefinedStatusClearAt(int index) const;
     Q_INVOKABLE void setPredefinedStatus(int index);
 
-    Q_REQUIRED_RESULT QStringList clearAtStages() const;
+    Q_REQUIRED_RESULT QStringList clearAtValues() const;
     Q_REQUIRED_RESULT QString clearAt() const;
     Q_INVOKABLE void setClearAt(int index);
 
     Q_REQUIRED_RESULT QString errorMessage() const;
 
 signals:
-    void showError();
     void errorMessageChanged();
     void userStatusChanged();
     void onlineStatusChanged();
@@ -122,8 +121,9 @@ private:
     Q_REQUIRED_RESULT QString timeDifferenceToString(int differenceSecs) const;
     Q_REQUIRED_RESULT Optional<ClearAt> clearStageTypeToDateTime(ClearStageType type) const;
     void setError(const QString &reason);
+    void clearError();
 
-    std::shared_ptr<UserStatusConnector> _userStatusJob {};
+    std::shared_ptr<UserStatusConnector> _userStatusConnector {};
     std::vector<UserStatus> _predefinedStatuses;
     UserStatus _userStatus;
     std::unique_ptr<DateTimeProvider> _dateTimeProvider;
@@ -140,5 +140,3 @@ private:
     };
 };
 }
-
-Q_DECLARE_METATYPE(OCC::SetUserStatusDialogModel *);

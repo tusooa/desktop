@@ -19,7 +19,9 @@ import QtQuick.Layouts 1.15
 import com.nextcloud.desktopclient 1.0 as NC
 
 ColumnLayout {
-    readonly property var emojiModel: NC.EmojiModel {}
+    NC.EmojiModel {
+        id: emojiModel
+    }
 
     signal chosen(string emoji)
 
@@ -35,8 +37,6 @@ ColumnLayout {
         implicitWidth: contentItem.childrenRect.width
         implicitHeight: contentItem.childrenRect.height
 
-        boundsBehavior: Flickable.DragOverBounds
-        clip: true
         orientation: ListView.Horizontal
 
         model: emojiModel.emojiCategoriesModel
@@ -45,9 +45,11 @@ ColumnLayout {
             width: metrics.height * 2
             height: metrics.height * 2
 
-            Text {
-                anchors.centerIn: parent
-                text: emoji
+            contentItem: Item {
+                Text {
+                    anchors.centerIn: parent
+                    text: emoji
+                }
             }
 
             Rectangle {
@@ -60,6 +62,7 @@ ColumnLayout {
 
                 color: "grey"
             }
+
 
             onClicked: {
                 emojiModel.setCategory(label)
@@ -92,7 +95,7 @@ ColumnLayout {
             width: metrics.height * 2
             height: metrics.height * 2
 
-            Text {
+            contentItem: Text {
                 anchors.centerIn: parent
                 text: modelData === undefined ? "" : modelData.unicode
             }

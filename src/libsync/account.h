@@ -16,7 +16,6 @@
 #ifndef SERVERCONNECTION_H
 #define SERVERCONNECTION_H
 
-#include "userstatusconnector.h"
 #include <QByteArray>
 #include <QUrl>
 #include <QNetworkCookie>
@@ -56,6 +55,7 @@ using AccountPtr = QSharedPointer<Account>;
 class AccessManager;
 class SimpleNetworkJob;
 class PushNotifications;
+class UserStatusConnector;
 
 /**
  * @brief Reimplement this to handle SSL errors from libsync
@@ -255,12 +255,12 @@ public:
     // Check for the directEditing capability
     void fetchDirectEditors(const QUrl &directEditingURL, const QString &directEditingETag);
 
-    void setupUserStatusJob();
+    void setupUserStatusConnector();
     void trySetupPushNotifications();
     PushNotifications *pushNotifications() const;
     void setPushNotificationsReconnectInterval(int interval);
 
-    std::shared_ptr<UserStatusConnector> userStatusJob() const;
+    std::shared_ptr<UserStatusConnector> userStatusConnector() const;
 
 public slots:
     /// Used when forgetting credentials
@@ -352,7 +352,7 @@ private:
 
     PushNotifications *_pushNotifications = nullptr;
 
-    std::shared_ptr<UserStatusConnector> _userStatusJob = nullptr;
+    std::shared_ptr<UserStatusConnector> _userStatusConnector;
 
     /* IMPORTANT - remove later - FIXME MS@2019-12-07 -->
      * TODO: For "Log out" & "Remove account": Remove client CA certs and KEY!

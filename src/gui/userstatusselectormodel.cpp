@@ -12,9 +12,10 @@
  * for more details.
  */
 
-#include "setuserstatusdialogmodel.h"
+#include "userstatusselectormodel.h"
 
 #include <ocsuserstatusconnector.h>
+#include <qnamespace.h>
 #include <userstatusconnector.h>
 #include <theme.h>
 
@@ -29,16 +30,16 @@ namespace OCC {
 
 Q_LOGGING_CATEGORY(lcUserStatusDialogModel, "nextcloud.gui.userstatusdialogmodel", QtInfoMsg)
 
-SetUserStatusDialogModel::SetUserStatusDialogModel(QObject *parent)
+UserStatusSelectorModel::UserStatusSelectorModel(QObject *parent)
     : QObject(parent)
     , _dateTimeProvider(new DateTimeProvider)
 {
 }
 
-SetUserStatusDialogModel::SetUserStatusDialogModel(std::shared_ptr<UserStatusConnector> userStatusJob,
+UserStatusSelectorModel::UserStatusSelectorModel(std::shared_ptr<UserStatusConnector> userStatusConnector,
     QObject *parent)
     : QObject(parent)
-    , _userStatusJob(std::move(userStatusJob))
+    , _userStatusConnector(std::move(userStatusConnector))
     , _userStatus("no-id", "", "😀",
           UserStatus::OnlineStatus::Online, false, {})
     , _dateTimeProvider(new DateTimeProvider)
@@ -46,17 +47,17 @@ SetUserStatusDialogModel::SetUserStatusDialogModel(std::shared_ptr<UserStatusCon
     init();
 }
 
-SetUserStatusDialogModel::SetUserStatusDialogModel(std::shared_ptr<UserStatusConnector> userStatusJob,
+UserStatusSelectorModel::UserStatusSelectorModel(std::shared_ptr<UserStatusConnector> userStatusConnector,
     std::unique_ptr<DateTimeProvider> dateTimeProvider,
     QObject *parent)
     : QObject(parent)
-    , _userStatusJob(std::move(userStatusJob))
+    , _userStatusConnector(std::move(userStatusConnector))
     , _dateTimeProvider(std::move(dateTimeProvider))
 {
     init();
 }
 
-SetUserStatusDialogModel::SetUserStatusDialogModel(const UserStatus &userStatus,
+UserStatusSelectorModel::UserStatusSelectorModel(const UserStatus &userStatus,
     std::unique_ptr<DateTimeProvider> dateTimeProvider, QObject *parent)
     : QObject(parent)
     , _userStatus(userStatus)
@@ -64,91 +65,91 @@ SetUserStatusDialogModel::SetUserStatusDialogModel(const UserStatus &userStatus,
 {
 }
 
-SetUserStatusDialogModel::SetUserStatusDialogModel(const UserStatus &userStatus,
+UserStatusSelectorModel::UserStatusSelectorModel(const UserStatus &userStatus,
     QObject *parent)
     : QObject(parent)
     , _userStatus(userStatus)
 {
 }
 
-void SetUserStatusDialogModel::init()
+void UserStatusSelectorModel::init()
 {
-    if (!_userStatusJob) {
+    if (!_userStatusConnector) {
         return;
     }
 
-    connect(_userStatusJob.get(), &UserStatusConnector::userStatusFetched, this,
-        &SetUserStatusDialogModel::onUserStatusFetched);
-    connect(_userStatusJob.get(), &UserStatusConnector::predefinedStatusesFetched, this,
-        &SetUserStatusDialogModel::onPredefinedStatusesFetched);
-    connect(_userStatusJob.get(), &UserStatusConnector::userStatusSet, this,
-        &SetUserStatusDialogModel::onUserStatusSet);
-    connect(_userStatusJob.get(), &UserStatusConnector::messageCleared, this,
-        &SetUserStatusDialogModel::onMessageCleared);
-    connect(_userStatusJob.get(), &UserStatusConnector::error, this,
-        &SetUserStatusDialogModel::onError);
+    connect(_userStatusConnector.get(), &UserStatusConnector::userStatusFetched, this,
+        &UserStatusSelectorModel::onUserStatusFetched);
+    connect(_userStatusConnector.get(), &UserStatusConnector::predefinedStatusesFetched, this,
+        &UserStatusSelectorModel::onPredefinedStatusesFetched);
+    connect(_userStatusConnector.get(), &UserStatusConnector::error, this,
+        &UserStatusSelectorModel::onError);
 
-    _userStatusJob->fetchUserStatus();
-    _userStatusJob->fetchPredefinedStatuses();
+    _userStatusConnector->fetchUserStatus();
+    _userStatusConnector->fetchPredefinedStatuses();
 }
 
-SetUserStatusDialogModel::~SetUserStatusDialogModel()
+UserStatusSelectorModel::~UserStatusSelectorModel()
 {
     qCDebug(lcUserStatusDialogModel) << "Destroyed";
 }
 
-void SetUserStatusDialogModel::onUserStatusSet()
+void UserStatusSelectorModel::onUserStatusSet()
 {
     qCDebug(lcUserStatusDialogModel) << "Emit finished";
     emit finished();
 }
 
-void SetUserStatusDialogModel::onMessageCleared()
+void UserStatusSelectorModel::onMessageCleared()
 {
     emit finished();
 }
 
-void SetUserStatusDialogModel::onError(UserStatusConnector::Error error)
+void UserStatusSelectorModel::onError(UserStatusConnector::Error error)
 {
     qCWarning(lcUserStatusDialogModel) << "Error:" << error;
 
     switch (error) {
     case UserStatusConnector::Error::CouldNotFetchPredefinedUserStatuses:
-        setError(tr("Could not fetch predefined statuses. Make sure you are connected to the internet."));
+        setError(tr("Could not fetch predefined statuses. Make sure you are connected to the server."));
         return;
 
     case UserStatusConnector::Error::CouldNotFetchUserStatus:
-        setError(tr("Could not fetch user status. Make sure you are connected to the internet."));
+        setError(tr("Could not fetch user status. Make sure you are connected to the server."));
         return;
 
     case UserStatusConnector::Error::UserStatusNotSupported:
-        setError(tr("User status feature is not supported on the server."));
+        setError(tr("User status feature is not supported. You will not be able to set your user status."));
         return;
 
     case UserStatusConnector::Error::EmojisNotSupported:
-        setError(tr("Emojis feature is not supported on the server."));
+        setError(tr("Emojis feature is not supported. Some user status functionality may not work."));
         return;
 
     case UserStatusConnector::Error::CouldNotSetUserStatus:
-        setError(tr("Could not set user status. Make sure you are connected to the internet."));
+        setError(tr("Could not set user status. Make sure you are connected to the server."));
         return;
 
     case UserStatusConnector::Error::CouldNotClearMessage:
-        setError(tr("Could not clear user status message. Make sure you are connected to the internet."));
+        setError(tr("Could not clear user status message. Make sure you are connected to the server."));
         return;
     }
 
     Q_UNREACHABLE();
 }
 
-void SetUserStatusDialogModel::setError(const QString &reason)
+void UserStatusSelectorModel::setError(const QString &reason)
 {
     _errorMessage = reason;
     emit errorMessageChanged();
-    emit showError();
 }
 
-void SetUserStatusDialogModel::setOnlineStatus(UserStatus::OnlineStatus status)
+void UserStatusSelectorModel::clearError()
+{
+    setError("");
+}
+
+void UserStatusSelectorModel::setOnlineStatus(UserStatus::OnlineStatus status)
 {
     if (status == _userStatus.state()) {
         return;
@@ -158,53 +159,54 @@ void SetUserStatusDialogModel::setOnlineStatus(UserStatus::OnlineStatus status)
     emit onlineStatusChanged();
 }
 
-QUrl SetUserStatusDialogModel::onlineIcon() const
+QUrl UserStatusSelectorModel::onlineIcon() const
 {
     return Theme::instance()->statusOnlineImageSource();
 }
 
-QUrl SetUserStatusDialogModel::awayIcon() const
+QUrl UserStatusSelectorModel::awayIcon() const
 {
     return Theme::instance()->statusAwayImageSource();
 }
-QUrl SetUserStatusDialogModel::dndIcon() const
+QUrl UserStatusSelectorModel::dndIcon() const
 {
     return Theme::instance()->statusDoNotDisturbImageSource();
 }
-QUrl SetUserStatusDialogModel::invisibleIcon() const
+QUrl UserStatusSelectorModel::invisibleIcon() const
 {
     return Theme::instance()->statusInvisibleImageSource();
 }
 
-UserStatus::OnlineStatus SetUserStatusDialogModel::onlineStatus() const
+UserStatus::OnlineStatus UserStatusSelectorModel::onlineStatus() const
 {
     return _userStatus.state();
 }
 
-QString SetUserStatusDialogModel::userStatusMessage() const
+QString UserStatusSelectorModel::userStatusMessage() const
 {
     return _userStatus.message();
 }
 
-void SetUserStatusDialogModel::setUserStatusMessage(const QString &message)
+void UserStatusSelectorModel::setUserStatusMessage(const QString &message)
 {
     _userStatus.setMessage(message);
     _userStatus.setMessagePredefined(false);
+    emit userStatusChanged();
 }
 
-void SetUserStatusDialogModel::setUserStatusEmoji(const QString &emoji)
+void UserStatusSelectorModel::setUserStatusEmoji(const QString &emoji)
 {
     _userStatus.setIcon(emoji);
     _userStatus.setMessagePredefined(false);
     emit userStatusChanged();
 }
 
-QString SetUserStatusDialogModel::userStatusEmoji() const
+QString UserStatusSelectorModel::userStatusEmoji() const
 {
     return _userStatus.icon();
 }
 
-void SetUserStatusDialogModel::onUserStatusFetched(const UserStatus &userStatus)
+void UserStatusSelectorModel::onUserStatusFetched(const UserStatus &userStatus)
 {
     if (userStatus.state() != UserStatus::OnlineStatus::Offline) {
         _userStatus.setState(userStatus.state());
@@ -223,7 +225,7 @@ void SetUserStatusDialogModel::onUserStatusFetched(const UserStatus &userStatus)
     emit clearAtChanged();
 }
 
-Optional<ClearAt> SetUserStatusDialogModel::clearStageTypeToDateTime(ClearStageType type) const
+Optional<ClearAt> UserStatusSelectorModel::clearStageTypeToDateTime(ClearStageType type) const
 {
     switch (type) {
     case ClearStageType::DontClear:
@@ -269,48 +271,67 @@ Optional<ClearAt> SetUserStatusDialogModel::clearStageTypeToDateTime(ClearStageT
     }
 }
 
-void SetUserStatusDialogModel::setUserStatus()
+void UserStatusSelectorModel::setUserStatus()
 {
-    _userStatusJob->setUserStatus(_userStatus);
+    Q_ASSERT(_userStatusConnector);
+    if (!_userStatusConnector) {
+        return;
+    }
+
+    connect(_userStatusConnector.get(), &UserStatusConnector::userStatusSet, this,
+        &UserStatusSelectorModel::onUserStatusSet, Qt::UniqueConnection);
+
+    clearError();
+    _userStatusConnector->setUserStatus(_userStatus);
 }
 
-void SetUserStatusDialogModel::clearUserStatus()
+void UserStatusSelectorModel::clearUserStatus()
 {
-    _userStatusJob->clearMessage();
+    Q_ASSERT(_userStatusConnector);
+    if (!_userStatusConnector) {
+        return;
+    }
+
+    connect(_userStatusConnector.get(), &UserStatusConnector::messageCleared, this,
+        &UserStatusSelectorModel::onMessageCleared, Qt::UniqueConnection);
+
+    clearError();
+    _userStatusConnector->clearMessage();
 }
 
-void SetUserStatusDialogModel::onPredefinedStatusesFetched(const std::vector<UserStatus> &statuses)
+void UserStatusSelectorModel::onPredefinedStatusesFetched(const std::vector<UserStatus> &statuses)
 {
     _predefinedStatuses = statuses;
     emit predefinedStatusesChanged();
 }
 
-UserStatus SetUserStatusDialogModel::predefinedStatus(int index) const
+UserStatus UserStatusSelectorModel::predefinedStatus(int index) const
 {
     Q_ASSERT(0 <= index && index < static_cast<int>(_predefinedStatuses.size()));
     return _predefinedStatuses[index];
 }
 
-int SetUserStatusDialogModel::predefinedStatusesCount() const
+int UserStatusSelectorModel::predefinedStatusesCount() const
 {
     return static_cast<int>(_predefinedStatuses.size());
 }
 
-void SetUserStatusDialogModel::setPredefinedStatus(int index)
+void UserStatusSelectorModel::setPredefinedStatus(int index)
 {
     Q_ASSERT(0 <= index && index < static_cast<int>(_predefinedStatuses.size()));
 
     _userStatus.setMessagePredefined(true);
-    _userStatus.setId(_predefinedStatuses[index].id());
-    _userStatus.setMessage(_predefinedStatuses[index].message());
-    _userStatus.setIcon(_predefinedStatuses[index].icon());
-    _userStatus.setClearAt(_predefinedStatuses[index].clearAt());
+    const auto predefinedStatus = _predefinedStatuses[index];
+    _userStatus.setId(predefinedStatus.id());
+    _userStatus.setMessage(predefinedStatus.message());
+    _userStatus.setIcon(predefinedStatus.icon());
+    _userStatus.setClearAt(predefinedStatus.clearAt());
 
     emit userStatusChanged();
     emit clearAtChanged();
 }
 
-QString SetUserStatusDialogModel::clearAtStageToString(ClearStageType stage) const
+QString UserStatusSelectorModel::clearAtStageToString(ClearStageType stage) const
 {
     switch (stage) {
     case ClearStageType::DontClear:
@@ -336,7 +357,7 @@ QString SetUserStatusDialogModel::clearAtStageToString(ClearStageType stage) con
     }
 }
 
-QStringList SetUserStatusDialogModel::clearAtStages() const
+QStringList UserStatusSelectorModel::clearAtValues() const
 {
     QStringList clearAtStages;
     std::transform(_clearStages.begin(), _clearStages.end(),
@@ -346,19 +367,19 @@ QStringList SetUserStatusDialogModel::clearAtStages() const
     return clearAtStages;
 }
 
-void SetUserStatusDialogModel::setClearAt(int index)
+void UserStatusSelectorModel::setClearAt(int index)
 {
     Q_ASSERT(0 <= index && index < static_cast<int>(_clearStages.size()));
     _userStatus.setClearAt(clearStageTypeToDateTime(_clearStages[index]));
     emit clearAtChanged();
 }
 
-QString SetUserStatusDialogModel::errorMessage() const
+QString UserStatusSelectorModel::errorMessage() const
 {
     return _errorMessage;
 }
 
-QString SetUserStatusDialogModel::timeDifferenceToString(int differenceSecs) const
+QString UserStatusSelectorModel::timeDifferenceToString(int differenceSecs) const
 {
     if (differenceSecs < 60) {
         return tr("Less than a minute");
@@ -386,7 +407,7 @@ QString SetUserStatusDialogModel::timeDifferenceToString(int differenceSecs) con
     }
 }
 
-QString SetUserStatusDialogModel::clearAtReadable(const Optional<ClearAt> &clearAt) const
+QString UserStatusSelectorModel::clearAtReadable(const Optional<ClearAt> &clearAt) const
 {
     if (clearAt) {
         switch (clearAt->_type) {
@@ -415,12 +436,12 @@ QString SetUserStatusDialogModel::clearAtReadable(const Optional<ClearAt> &clear
     return tr("Don't clear");
 }
 
-QString SetUserStatusDialogModel::predefinedStatusClearAt(int index) const
+QString UserStatusSelectorModel::predefinedStatusClearAt(int index) const
 {
     return clearAtReadable(predefinedStatus(index).clearAt());
 }
 
-QString SetUserStatusDialogModel::clearAt() const
+QString UserStatusSelectorModel::clearAt() const
 {
     return clearAtReadable(_userStatus.clearAt());
 }

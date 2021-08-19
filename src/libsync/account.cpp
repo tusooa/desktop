@@ -96,7 +96,7 @@ QString Account::davPath() const
 void Account::setSharedThis(AccountPtr sharedThis)
 {
     _sharedThis = sharedThis.toWeakRef();
-    setupUserStatusJob();
+    setupUserStatusConnector();
 }
 
 QString Account::davPathBase()
@@ -566,14 +566,14 @@ void Account::setCapabilities(const QVariantMap &caps)
 {
     _capabilities = Capabilities(caps);
 
-    setupUserStatusJob();
+    setupUserStatusConnector();
     trySetupPushNotifications();
 }
 
-void Account::setupUserStatusJob()
+void Account::setupUserStatusConnector()
 {
-    _userStatusJob = std::make_shared<OcsUserStatusConnector>(sharedFromThis());
-    connect(_userStatusJob.get(), &UserStatusConnector::userStatusFetched, this, [this](const UserStatus &) {
+    _userStatusConnector = std::make_shared<OcsUserStatusConnector>(sharedFromThis());
+    connect(_userStatusConnector.get(), &UserStatusConnector::userStatusFetched, this, [this](const UserStatus &) {
         emit userStatusChanged();
     });
 }
@@ -775,9 +775,9 @@ PushNotifications *Account::pushNotifications() const
     return _pushNotifications;
 }
 
-std::shared_ptr<UserStatusConnector> Account::userStatusJob() const
+std::shared_ptr<UserStatusConnector> Account::userStatusConnector() const
 {
-    return _userStatusJob;
+    return _userStatusConnector;
 }
 
 } // namespace OCC

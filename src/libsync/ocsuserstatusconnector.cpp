@@ -26,6 +26,7 @@
 #include <QString>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <qloggingcategory.h>
 
 namespace {
 OCC::UserStatus::OnlineStatus stringToUserOnlineStatus(const QString &status)
@@ -88,7 +89,11 @@ void OcsUserStatusConnector::fetchUserStatus()
         return;
     }
 
-    deleteGetUserStatusJob();
+    if (_getUserStatusJob) {
+        qCDebug(lcOcsUserStatusConnector) << "Get user status job is already running.";
+        return;
+    }
+
     _getUserStatusJob = new JsonApiJob(_account, userStatusBaseUrl, this);
     connect(_getUserStatusJob, &JsonApiJob::jsonReceived, this, &OcsUserStatusConnector::onUserStatusFetched);
     _getUserStatusJob->start();
@@ -124,7 +129,6 @@ static UserStatus jsonToUserStatus(const QJsonDocument &json)
 
 void OcsUserStatusConnector::onUserStatusFetched(const QJsonDocument &json, int statusCode)
 {
-    deleteGetUserStatusJob();
     logResponse("user status fetched", json, statusCode);
 
     if (statusCode != 200) {
@@ -144,7 +148,10 @@ void OcsUserStatusConnector::fetchPredefinedStatuses()
         return;
     }
 
-    deleteGetPredefinedStatusesJob();
+    if (_getPredefinedStausesJob) {
+        qCDebug(lcOcsUserStatusConnector) << "Get predefined statuses job is already running";
+        return;
+    }
 
     _getPredefinedStausesJob = new JsonApiJob(_account,
         baseUrl + QStringLiteral("/predefined_statuses"), this);
@@ -208,7 +215,6 @@ void OcsUserStatusConnector::onPredefinedStatusesFetched(const QJsonDocument &js
             clearAt);
     }
 
-    deleteGetPredefinedStatusesJob();
     emit predefinedStatusesFetched(statuses);
 }
 
@@ -258,9 +264,13 @@ void OcsUserStatusConnector::setUserStatus(const UserStatus &userStatus)
         return;
     }
 
+    if (_setOnlineStatusJob || _setMessageJob) {
+        qCDebug(lcOcsUserStatusConnector) << "Set online status job or set message job are already running.";
+        return;
+    }
+
     // Set the state
     {
-        deleteSetOnlineStatusJob();
         _setOnlineStatusJob = new JsonApiJob(_account,
             userStatusBaseUrl + QStringLiteral("/status"), this);
         _setOnlineStatusJob->usePUT();
@@ -270,11 +280,9 @@ void OcsUserStatusConnector::setUserStatus(const UserStatus &userStatus)
         QJsonDocument body;
         body.setObject(dataObject);
         _setOnlineStatusJob->setBody(body);
-        connect(_setOnlineStatusJob, &JsonApiJob::jsonReceived, this, &OcsUserStatusConnector::onUserStatusStateSet);
+        connect(_setOnlineStatusJob, &JsonApiJob::jsonReceived, this, &OcsUserStatusConnector::onUserStatusOnlineStatusSet);
         _setOnlineStatusJob->start();
     }
-
-    deleteSetMessageJob();
 
     if (userStatus.messagePredefined()) {
         _setMessageJob = new JsonApiJob(_account, userStatusBaseUrl + QStringLiteral("/message/predefined"), this);
@@ -317,9 +325,8 @@ void OcsUserStatusConnector::setUserStatus(const UserStatus &userStatus)
     }
 }
 
-void OcsUserStatusConnector::onUserStatusStateSet(const QJsonDocument &json, int statusCode)
+void OcsUserStatusConnector::onUserStatusOnlineStatusSet(const QJsonDocument &json, int statusCode)
 {
-    deleteSetOnlineStatusJob();
     logResponse("Online status set", json, statusCode);
 
     if (statusCode != 200) {
@@ -330,7 +337,6 @@ void OcsUserStatusConnector::onUserStatusStateSet(const QJsonDocument &json, int
 
 void OcsUserStatusConnector::onUserStatusMessageSet(const QJsonDocument &json, int statusCode)
 {
-    deleteSetMessageJob();
     logResponse("Message set", json, statusCode);
 
     if (statusCode != 200) {
@@ -348,8 +354,6 @@ void OcsUserStatusConnector::onUserStatusMessageSet(const QJsonDocument &json, i
 
 void OcsUserStatusConnector::clearMessage()
 {
-    deleteClearMesssageJob();
-
     _clearMessageJob = new JsonApiJob(_account, userStatusBaseUrl + QStringLiteral("/message"));
     _clearMessageJob->useDELETE();
     connect(_clearMessageJob, &JsonApiJob::jsonReceived, this, &OcsUserStatusConnector::onMessageCleared);
@@ -363,7 +367,6 @@ UserStatus OcsUserStatusConnector::userStatus() const
 
 void OcsUserStatusConnector::onMessageCleared(const QJsonDocument &json, int statusCode)
 {
-    deleteClearMesssageJob();
     logResponse("Message cleared", json, statusCode);
 
     if (statusCode != 200) {
@@ -373,40 +376,5 @@ void OcsUserStatusConnector::onMessageCleared(const QJsonDocument &json, int sta
 
     _userStatus = {};
     emit messageCleared();
-}
-
-void OcsUserStatusConnector::deleteClearMesssageJob()
-{
-    if (_clearMessageJob) {
-        _clearMessageJob->deleteLater();
-    }
-}
-
-void OcsUserStatusConnector::deleteSetMessageJob()
-{
-    if (_setMessageJob) {
-        _setMessageJob->deleteLater();
-    }
-}
-
-void OcsUserStatusConnector::deleteSetOnlineStatusJob()
-{
-    if (_setOnlineStatusJob) {
-        _setOnlineStatusJob->deleteLater();
-    }
-}
-
-void OcsUserStatusConnector::deleteGetPredefinedStatusesJob()
-{
-    if (_getPredefinedStausesJob) {
-        _getPredefinedStausesJob->deleteLater();
-    }
-}
-
-void OcsUserStatusConnector::deleteGetUserStatusJob()
-{
-    if (_getUserStatusJob) {
-        _getUserStatusJob->deleteLater();
-    }
 }
 }

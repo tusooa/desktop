@@ -21,7 +21,6 @@
 #include <QPointer>
 #include "connectionvalidator.h"
 #include "creds/abstractcredentials.h"
-#include "ocsuserstatusconnector.h"
 
 #include <memory>
 
