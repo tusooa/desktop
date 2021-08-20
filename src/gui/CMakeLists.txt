@@ -37,6 +37,7 @@ set(client_UI_SRCS
     mnemonicdialog.ui
     tray/ActivityActionButton.qml
     tray/ActivityItem.qml
+    tray/ActivityList.qml
     tray/Window.qml
     tray/UserLine.qml
     wizard/flow2authwidget.ui
@@ -106,6 +107,7 @@ set(client_SRCS
     headerbanner.cpp
     iconjob.cpp
     remotewipe.cpp
+    fileactivitylistmodel.cpp
     tray/ActivityData.cpp
     tray/ActivityListModel.cpp
     tray/UserModel.cpp

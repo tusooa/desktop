@@ -18,6 +18,7 @@
 #include <QWidget>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <qloggingcategory.h>
 
 #include "account.h"
 #include "accountstate.h"
@@ -37,6 +38,11 @@
 namespace OCC {
 
 Q_LOGGING_CATEGORY(lcActivity, "nextcloud.gui.activity", QtInfoMsg)
+
+ActivityListModel::ActivityListModel(QObject *parent)
+    : QAbstractListModel(parent)
+{
+}
 
 ActivityListModel::ActivityListModel(AccountState *accountState, QObject *parent)
     : QAbstractListModel(parent)
@@ -59,6 +65,7 @@ QHash<int, QByteArray> ActivityListModel::roleNames() const
     roles[ActionTextColorRole] = "activityTextTitleColor";
     roles[ObjectTypeRole] = "objectType";
     roles[PointInTimeRole] = "dateTime";
+    roles[DisplayActions] = "displayActions";
     return roles;
 }
 
@@ -221,6 +228,8 @@ QVariant ActivityListModel::data(const QModelIndex &index, int role) const
         return a._id == -1 ? "" : Utility::timeAgoInWords(a._dateTime.toLocalTime());
     case AccountConnectedRole:
         return (ast && ast->isConnected());
+    case DisplayActions:
+        return _displayActions;
     default:
         return QVariant();
     }
@@ -303,9 +312,8 @@ void ActivityListModel::slotActivitiesReceived(const QJsonDocument &json, int st
         _currentItem = list.last()._id;
 
         _totalActivitiesFetched++;
-        if(_totalActivitiesFetched == _maxActivities ||
-            a._dateTime < oldestDate) {
-
+        if (_totalActivitiesFetched == _maxActivities
+            || (_hideOldActivities && a._dateTime < oldestDate)) {
             _showMoreActivitiesAvailableEntry = true;
             _doneFetching = true;
             break;
@@ -478,6 +486,11 @@ void ActivityListModel::triggerAction(int activityIndex, int actionIndex)
     }
 
     emit sendNotificationRequest(activity._accName, action._link, action._verb, activityIndex);
+}
+
+AccountState *ActivityListModel::accountState() const
+{
+    return _accountState;
 }
 
 void ActivityListModel::combineActivityLists()

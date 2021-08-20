@@ -23,6 +23,7 @@
 #endif
 
 #include "application.h"
+#include "fileactivitylistmodel.h"
 #include "theme.h"
 #include "common/utility.h"
 #include "cocoainitializer.h"
@@ -53,6 +54,9 @@ int main(int argc, char **argv)
 {
     Q_INIT_RESOURCE(resources);
     Q_INIT_RESOURCE(theme);
+
+    qmlRegisterType<OCC::ActivityListModel>("com.nextcloud.desktopclient", 1, 0, "ActivityListModel");
+    qmlRegisterType<OCC::FileActivityListModel>("com.nextcloud.desktopclient", 1, 0, "FileActivityListModel");
 
     // Work around a bug in KDE's qqc2-desktop-style which breaks
     // buttons with icons not based on a name, by forcing a style name
