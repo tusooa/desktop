@@ -100,6 +100,11 @@ bool Capabilities::shareResharing() const
     return _capabilities["files_sharing"].toMap()["resharing"].toBool();
 }
 
+int Capabilities::shareServerDefaultPermissions() const
+{
+    return _capabilities["files_sharing"].toMap()["default_permissions"].toInt();
+}
+
 bool Capabilities::clientSideEncryptionAvailable() const
 {
     auto it = _capabilities.constFind(QStringLiteral("end-to-end-encryption"));

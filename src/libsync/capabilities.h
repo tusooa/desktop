@@ -57,6 +57,7 @@ public:
     int sharePublicLinkExpireDateDays() const;
     bool sharePublicLinkMultiple() const;
     bool shareResharing() const;
+    int shareServerDefaultPermissions() const;
     bool chunkingNg() const;
     bool userStatus() const;
 
