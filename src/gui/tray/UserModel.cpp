@@ -14,7 +14,6 @@
 #include "syncfileitem.h"
 #include "tray/ActivityListModel.h"
 #include "tray/NotificationCache.h"
-#include "userstatusselectordialog.h"
 #include "userstatusconnector.h"
 
 #include <QDesktopServices>
@@ -925,15 +924,14 @@ Q_INVOKABLE void UserModel::removeAccount(const int &id)
     endRemoveRows();
 }
 
-void UserModel::showUserStatusSelectorDialog(const int &id)
+std::shared_ptr<OCC::UserStatusConnector> UserModel::userStatusConnector(int id)
 {
     if (id < 0 || id >= _users.size()) {
-        return;
+        return nullptr;
     }
 
-    UserStatusSelectorDialog::show(_users[id]->account());
+    return _users[id]->account()->userStatusConnector();
 }
-
 
 int UserModel::rowCount(const QModelIndex &parent) const
 {

@@ -107,7 +107,6 @@ set(client_SRCS
     headerbanner.cpp
     iconjob.cpp
     remotewipe.cpp
-    userstatusselectordialog.cpp
     userstatusselectormodel.cpp
     emojimodel.cpp
     tray/ActivityData.cpp

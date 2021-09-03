@@ -17,6 +17,8 @@ MenuItem {
     property variant dialog;
     property variant comp;
 
+    signal showUserStatusSelectorDialog(int id)
+
     RowLayout {
         id: userLineLayout
         spacing: 0
@@ -191,12 +193,6 @@ MenuItem {
                     radius: 2
                 }
 
-                Window {
-                    id: mywin
-                    width: 200
-                    height: 200
-                }
-
                 MenuItem {
                     visible: model.isConnected && model.serverHasUserStatus
                     height: visible ? implicitHeight : 0
@@ -205,7 +201,7 @@ MenuItem {
                     font.pixelSize: Style.topLinePixelSize
                     hoverEnabled: true
                     onClicked: {
-                        UserModel.showUserStatusSelectorDialog(index)
+                        showUserStatusSelectorDialog(index)
                         accountMenu.close()
                     }
 

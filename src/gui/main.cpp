@@ -16,6 +16,7 @@
 
 #include <cmath>
 #include <csignal>
+#include <qqml.h>
 
 #ifdef Q_OS_UNIX
 #include <sys/time.h>
@@ -27,7 +28,6 @@
 #include "common/utility.h"
 #include "cocoainitializer.h"
 #include "userstatusselectormodel.h"
-#include "userstatusselectordialog.h"
 #include "emojimodel.h"
 
 #if defined(BUILD_UPDATER)
@@ -57,6 +57,15 @@ int main(int argc, char **argv)
     Q_INIT_RESOURCE(resources);
     Q_INIT_RESOURCE(theme);
 
+    qmlRegisterType<EmojiModel>("com.nextcloud.desktopclient", 1, 0, "EmojiModel");
+    qRegisterMetaTypeStreamOperators<Emoji>();
+    qmlRegisterType<UserStatusSelectorModel>("com.nextcloud.desktopclient", 1, 0,
+        "UserStatusSelectorModel");
+    qmlRegisterUncreatableType<OCC::UserStatus>("com.nextcloud.desktopclient", 1, 0, "UserStatus",
+        "Access to Status enum");
+    qRegisterMetaType<OCC::UserStatus>("UserStatus");
+
+
     // Work around a bug in KDE's qqc2-desktop-style which breaks
     // buttons with icons not based on a name, by forcing a style name
     // the platformtheme plugin won't try to force qqc2-desktops-style
@@ -72,14 +81,6 @@ int main(int argc, char **argv)
     Mac::CocoaInitializer cocoaInit; // RIIA
 #endif
     OCC::Application app(argc, argv);
-
-    qmlRegisterType<EmojiModel>("com.nextcloud.desktopclient", 1, 0, "EmojiModel");
-    qRegisterMetaTypeStreamOperators<Emoji>();
-    qmlRegisterType<UserStatusSelectorModel>("com.nextcloud.desktopclient", 1, 0,
-        "UserStatusSelectorModel");
-    qmlRegisterUncreatableType<OCC::UserStatus>("com.nextcloud.desktopclient", 1, 0, "UserStatus",
-        "Access to Status enum");
-    qRegisterMetaType<OCC::UserStatus>("UserStatus");
 
 #ifdef Q_OS_WIN
     // The Windows style still has pixelated elements with Qt 5.6,

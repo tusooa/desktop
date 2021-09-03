@@ -113,7 +113,7 @@ public:
 
     explicit UserStatusConnector(QObject *parent = nullptr);
 
-    virtual ~UserStatusConnector();
+    ~UserStatusConnector() override;
 
     virtual void fetchUserStatus() = 0;
 
@@ -134,4 +134,5 @@ signals:
 };
 }
 
+Q_DECLARE_METATYPE(OCC::UserStatusConnector *)
 Q_DECLARE_METATYPE(OCC::UserStatus)

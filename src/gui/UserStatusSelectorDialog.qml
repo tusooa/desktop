@@ -3,7 +3,13 @@ import QtQuick.Window 2.15
 import com.nextcloud.desktopclient 1.0 as NC
 
 Window {
-    property NC.UserStatusSelectorModel model: NC.UserStatusSelectorModel {}
+    id: dialog
+    
+    property NC.UserStatusSelectorModel model: NC.UserStatusSelectorModel {
+        onFinished: {
+            dialog.close()
+        }
+    }
 
     minimumWidth: view.implicitWidth
     minimumHeight: view.implicitHeight

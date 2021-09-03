@@ -13,6 +13,7 @@
  */
 
 #include "userstatusselectormodel.h"
+#include "tray/UserModel.h"
 
 #include <ocsuserstatusconnector.h>
 #include <qnamespace.h>
@@ -39,7 +40,7 @@ UserStatusSelectorModel::UserStatusSelectorModel(QObject *parent)
 UserStatusSelectorModel::UserStatusSelectorModel(std::shared_ptr<UserStatusConnector> userStatusConnector,
     QObject *parent)
     : QObject(parent)
-    , _userStatusConnector(std::move(userStatusConnector))
+    , _userStatusConnector(userStatusConnector)
     , _userStatus("no-id", "", "😀",
           UserStatus::OnlineStatus::Online, false, {})
     , _dateTimeProvider(new DateTimeProvider)
@@ -51,7 +52,7 @@ UserStatusSelectorModel::UserStatusSelectorModel(std::shared_ptr<UserStatusConne
     std::unique_ptr<DateTimeProvider> dateTimeProvider,
     QObject *parent)
     : QObject(parent)
-    , _userStatusConnector(std::move(userStatusConnector))
+    , _userStatusConnector(userStatusConnector)
     , _dateTimeProvider(std::move(dateTimeProvider))
 {
     init();
@@ -72,6 +73,30 @@ UserStatusSelectorModel::UserStatusSelectorModel(const UserStatus &userStatus,
 {
 }
 
+void UserStatusSelectorModel::load(int id)
+{
+    reset();
+    _userStatusConnector = UserModel::instance()->userStatusConnector(id);
+    init();
+}
+
+void UserStatusSelectorModel::reset()
+{
+    if (_userStatusConnector) {
+        disconnect(_userStatusConnector.get(), &UserStatusConnector::userStatusFetched, this,
+            &UserStatusSelectorModel::onUserStatusFetched);
+        disconnect(_userStatusConnector.get(), &UserStatusConnector::predefinedStatusesFetched, this,
+            &UserStatusSelectorModel::onPredefinedStatusesFetched);
+        disconnect(_userStatusConnector.get(), &UserStatusConnector::error, this,
+            &UserStatusSelectorModel::onError);
+        disconnect(_userStatusConnector.get(), &UserStatusConnector::userStatusSet, this,
+            &UserStatusSelectorModel::onUserStatusSet);
+        disconnect(_userStatusConnector.get(), &UserStatusConnector::messageCleared, this,
+            &UserStatusSelectorModel::onMessageCleared);
+    }
+    _userStatusConnector = nullptr;
+}
+
 void UserStatusSelectorModel::init()
 {
     if (!_userStatusConnector) {
@@ -84,6 +109,10 @@ void UserStatusSelectorModel::init()
         &UserStatusSelectorModel::onPredefinedStatusesFetched);
     connect(_userStatusConnector.get(), &UserStatusConnector::error, this,
         &UserStatusSelectorModel::onError);
+    connect(_userStatusConnector.get(), &UserStatusConnector::userStatusSet, this,
+        &UserStatusSelectorModel::onUserStatusSet);
+    connect(_userStatusConnector.get(), &UserStatusConnector::messageCleared, this,
+        &UserStatusSelectorModel::onMessageCleared);
 
     _userStatusConnector->fetchUserStatus();
     _userStatusConnector->fetchPredefinedStatuses();
@@ -278,9 +307,6 @@ void UserStatusSelectorModel::setUserStatus()
         return;
     }
 
-    connect(_userStatusConnector.get(), &UserStatusConnector::userStatusSet, this,
-        &UserStatusSelectorModel::onUserStatusSet, Qt::UniqueConnection);
-
     clearError();
     _userStatusConnector->setUserStatus(_userStatus);
 }
@@ -291,9 +317,6 @@ void UserStatusSelectorModel::clearUserStatus()
     if (!_userStatusConnector) {
         return;
     }
-
-    connect(_userStatusConnector.get(), &UserStatusConnector::messageCleared, this,
-        &UserStatusSelectorModel::onMessageCleared, Qt::UniqueConnection);
 
     clearError();
     _userStatusConnector->clearMessage();

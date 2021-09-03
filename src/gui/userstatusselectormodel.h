@@ -62,7 +62,9 @@ public:
     explicit UserStatusSelectorModel(const UserStatus &userStatus,
         QObject *parent = nullptr);
 
-    ~UserStatusSelectorModel();
+    ~UserStatusSelectorModel() override;
+
+    Q_INVOKABLE void load(int id);
 
     Q_REQUIRED_RESULT UserStatus::OnlineStatus onlineStatus() const;
     Q_INVOKABLE void setOnlineStatus(OCC::UserStatus::OnlineStatus status);
@@ -110,6 +112,7 @@ private:
     };
 
     void init();
+    void reset();
     void onUserStatusFetched(const UserStatus &userStatus);
     void onPredefinedStatusesFetched(const std::vector<UserStatus> &statuses);
     void onUserStatusSet();

@@ -162,7 +162,8 @@ public:
     Q_INVOKABLE void login(const int &id);
     Q_INVOKABLE void logout(const int &id);
     Q_INVOKABLE void removeAccount(const int &id);
-    Q_INVOKABLE void showUserStatusSelectorDialog(const int &id);
+
+    Q_INVOKABLE std::shared_ptr<OCC::UserStatusConnector> userStatusConnector(int id);
 
     ActivityListModel *currentActivityModel();
 
