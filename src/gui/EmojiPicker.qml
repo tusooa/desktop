@@ -35,7 +35,7 @@ ColumnLayout {
         id: headerLayout
         Layout.fillWidth: true
         implicitWidth: contentItem.childrenRect.width
-        implicitHeight: contentItem.childrenRect.height
+        implicitHeight: metrics.height * 2
 
         orientation: ListView.Horizontal
 
@@ -43,7 +43,7 @@ ColumnLayout {
 
         delegate: ItemDelegate {
             width: metrics.height * 2
-            height: metrics.height * 2
+            height: headerLayout.height
 
             contentItem: Item {
                 Text {
