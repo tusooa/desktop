@@ -27,17 +27,8 @@
 **
 ****************************************************************************/
 
-#ifndef QHTTPSERVERROUTER_P_H
-#define QHTTPSERVERROUTER_P_H
-
-#include <qhttpserverrouter.h>
-#include <qhttpserverrouterrule.h>
-
-#include <QtCore/qmap.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qstring.h>
-
-#include <memory>
+#ifndef QABSTRACTHTTPSERVER_P_H
+#define QABSTRACTHTTPSERVER_P_H
 
 //
 //  W A R N I N G
@@ -49,17 +40,43 @@
 //
 // We mean it.
 
+#include <QtHttpServer/qabstracthttpserver.h>
+#include <QtHttpServer/qthttpserverglobal.h>
+
+#include <private/qobject_p.h>
+
+#if defined(QT_WEBSOCKETS_LIB)
+#include <QtWebSockets/qwebsocketserver.h>
+#endif // defined(QT_WEBSOCKETS_LIB)
+
 QT_BEGIN_NAMESPACE
 
-class QHttpServerRouterPrivate
-{
-public:
-    QHttpServerRouterPrivate();
+class QHttpServerRequest;
 
-    QMap<int, QLatin1String> converters;
-    std::list<std::unique_ptr<QHttpServerRouterRule>> rules;
+class Q_HTTPSERVER_EXPORT QAbstractHttpServerPrivate: public QObjectPrivate
+{
+    Q_DECLARE_PUBLIC(QAbstractHttpServer)
+
+public:
+    QAbstractHttpServerPrivate();
+
+#if defined(QT_WEBSOCKETS_LIB)
+    QWebSocketServer websocketServer {
+        QLatin1String("QtHttpServer"),
+        QWebSocketServer::NonSecureMode
+    };
+#endif // defined(QT_WEBSOCKETS_LIB)
+
+    void handleNewConnections();
+    void handleReadyRead(QTcpSocket *socket,
+                         QHttpServerRequest *request);
+
+#if QT_CONFIG(ssl)
+    QSslConfiguration sslConfiguration;
+    bool sslEnabled = false;
+#endif
 };
 
 QT_END_NAMESPACE
 
-#endif // QHTTPSERVERROUTER_P_H
+#endif // QABSTRACTHTTPSERVER_P_H

@@ -73,6 +73,6 @@ D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtHttpServer_autogen/MPOZ4OR
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtcpsocket.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetworkglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qsslserver.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qtsslserverglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qthttpserverglobal.h
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qthttpserverglobal.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qsslserver.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h

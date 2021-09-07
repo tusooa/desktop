@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Mikhail Svetkin <mikhail.svetkin@gmail.com>
+** Copyright (C) 2019 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtHttpServer module of the Qt Toolkit.
@@ -27,36 +27,24 @@
 **
 ****************************************************************************/
 
-#ifndef QHTTPSERVERLITERALS_P_H
-#define QHTTPSERVERLITERALS_P_H
+#ifndef QTHTTPSERVERGLOBAL_H
+#define QTHTTPSERVERGLOBAL_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists for the convenience
-// of QHttpServer. This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-
-#include "qthttpserverglobal.h"
-
-#include <QtCore/qbytearray.h>
+#include <QtCore/qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
-class Q_HTTPSERVER_EXPORT QHttpServerLiterals
-{
-
-public:
-    static QByteArray contentTypeHeader();
-    static QByteArray contentTypeXEmpty();
-    static QByteArray contentTypeTextHtml();
-    static QByteArray contentTypeJson();
-    static QByteArray contentLengthHeader();
-};
+#ifndef QT_STATIC
+#  if defined(QT_BUILD_HTTPSERVER_LIB)
+#    define Q_HTTPSERVER_EXPORT Q_DECL_EXPORT
+#  else
+#    define Q_HTTPSERVER_EXPORT Q_DECL_IMPORT
+#  endif
+#else
+#  define Q_HTTPSERVER_EXPORT
+#endif
 
 QT_END_NAMESPACE
 
-#endif // QHTTPSERVERLITERALS_P_H
+#endif // QTHTTPSERVERGLOBAL_H
+

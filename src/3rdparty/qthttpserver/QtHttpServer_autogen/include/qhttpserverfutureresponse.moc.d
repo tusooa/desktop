@@ -232,12 +232,12 @@ D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtHttpServer_autogen/include
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtcpsocket.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetworkglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtSslServer/qsslserver.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qtsslserverglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/private/qabstracthttpserver_p.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/private/qhttpserverresponse_p.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qabstracthttpserver.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponder.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponse.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qthttpserverglobal.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/private/qabstracthttpserver_p.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/private/qhttpserverresponse_p.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qabstracthttpserver.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponder.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponse.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qthttpserverglobal.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qsslserver.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h \
   D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverfutureresponse.h

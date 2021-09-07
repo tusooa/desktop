@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 The Qt Company Ltd.
+** Copyright (C) 2019 Mikhail Svetkin <mikhail.svetkin@gmail.com>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtHttpServer module of the Qt Toolkit.
@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 
-#ifndef QABSTRACTHTTPSERVER_P_H
-#define QABSTRACTHTTPSERVER_P_H
+#ifndef QHTTPSERVERLITERALS_P_H
+#define QHTTPSERVERLITERALS_P_H
 
 //
 //  W A R N I N G
@@ -40,43 +40,23 @@
 //
 // We mean it.
 
-#include <qabstracthttpserver.h>
-#include "qthttpserverglobal.h"
+#include <QtHttpServer/qthttpserverglobal.h>
 
-#include <private/qobject_p.h>
-
-#if defined(QT_WEBSOCKETS_LIB)
-#include <QtWebSockets/qwebsocketserver.h>
-#endif // defined(QT_WEBSOCKETS_LIB)
+#include <QtCore/qbytearray.h>
 
 QT_BEGIN_NAMESPACE
 
-class QHttpServerRequest;
-
-class Q_HTTPSERVER_EXPORT QAbstractHttpServerPrivate: public QObjectPrivate
+class Q_HTTPSERVER_EXPORT QHttpServerLiterals
 {
-    Q_DECLARE_PUBLIC(QAbstractHttpServer)
 
 public:
-    QAbstractHttpServerPrivate();
-
-#if defined(QT_WEBSOCKETS_LIB)
-    QWebSocketServer websocketServer {
-        QLatin1String("QtHttpServer"),
-        QWebSocketServer::NonSecureMode
-    };
-#endif // defined(QT_WEBSOCKETS_LIB)
-
-    void handleNewConnections();
-    void handleReadyRead(QTcpSocket *socket,
-                         QHttpServerRequest *request);
-
-#if QT_CONFIG(ssl)
-    QSslConfiguration sslConfiguration;
-    bool sslEnabled = false;
-#endif
+    static QByteArray contentTypeHeader();
+    static QByteArray contentTypeXEmpty();
+    static QByteArray contentTypeTextHtml();
+    static QByteArray contentTypeJson();
+    static QByteArray contentLengthHeader();
 };
 
 QT_END_NAMESPACE
 
-#endif // QABSTRACTHTTPSERVER_P_H
+#endif // QHTTPSERVERLITERALS_P_H

@@ -27,50 +27,43 @@
 **
 ****************************************************************************/
 
-#ifndef QHTTPSERVERRESPONSE_P_H
-#define QHTTPSERVERRESPONSE_P_H
+#ifndef QHTTPSERVER_P_H
+#define QHTTPSERVER_P_H
 
 //
 //  W A R N I N G
 //  -------------
 //
 // This file is not part of the Qt API.  It exists for the convenience
-// of QHttpServerResponse. This header file may change from version to
+// of QHttpServer. This header file may change from version to
 // version without notice, or even be removed.
 //
 // We mean it.
 
 #include <private/qabstracthttpserver_p.h>
 
-#include <qhttpserverresponse.h>
+#include <QtHttpServer/qhttpserver.h>
+#include <QtHttpServer/qhttpserverresponse.h>
+#include <QtHttpServer/qhttpserverrequest.h>
+#include <QtHttpServer/qhttpserverrouter.h>
 
-#include <functional>
-#include <unordered_map>
+#include <QtCore/qglobal.h>
+
+#include <list>
 
 QT_BEGIN_NAMESPACE
 
-class QHttpServerResponsePrivate
+class QHttpServerPrivate: public QAbstractHttpServerPrivate
 {
-    struct HashHelper {
-        std::size_t operator()(const QByteArray& key) const
-        {
-            return qHash(key.toLower());
-        }
-    };
+    Q_DECLARE_PUBLIC(QHttpServer)
 
 public:
-    explicit QHttpServerResponsePrivate() = default;
-    virtual ~QHttpServerResponsePrivate() = default;
+    QHttpServerPrivate() = default;
 
-    QHttpServerResponsePrivate(QByteArray &&d, const QHttpServerResponse::StatusCode sc);
-    QHttpServerResponsePrivate(const QHttpServerResponse::StatusCode sc);
-
-    QByteArray data;
-    QHttpServerResponse::StatusCode statusCode;
-    std::unordered_multimap<QByteArray, QByteArray, HashHelper> headers;
-    bool derived{false};
+    QHttpServerRouter router;
+    std::list<QHttpServer::AfterRequestHandler> afterRequestHandlers;
 };
 
 QT_END_NAMESPACE
 
-#endif // QHTTPSERVERRESPONSE_P_H
+#endif // QHTTPSERVER_P_H

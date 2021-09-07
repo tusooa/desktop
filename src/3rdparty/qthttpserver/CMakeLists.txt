@@ -20,10 +20,16 @@ target_link_libraries(QtSslServer
 )
 
 target_include_directories(QtSslServer
-    PUBLIC
-        qthttpserver/src/sslserver/
     PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/include/QtSslServer
+)
+
+set_target_properties(
+  QtSslServer
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY
+        ${BIN_OUTPUT_DIRECTORY}
 )
 
 file(GLOB QtSslServer_HEADERS
@@ -37,15 +43,15 @@ file(GLOB QtSslServer_private_HEADERS
 
 file(
     COPY ${QtSslServer_HEADERS}
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/QtSslServer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtSslServer/"
 )
 file(
     COPY ${QtSslServer_private_HEADERS}
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/private/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtSslServer/private/"
 )
 file(
     COPY "${CMAKE_CURRENT_SOURCE_DIR}/headers/QtSslServer"
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/QtSslServer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtSslServer/"
 )
 
 add_library(QtHttpServer SHARED
@@ -70,12 +76,17 @@ target_link_libraries(QtHttpServer
 )
 
 target_include_directories(QtHttpServer
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/qthttpserver/
-        qthttpserver/src/httpserver/
-        qthttpserver/src/3rdparty/http-parser/
     PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}
+        qthttpserver/src/3rdparty/http-parser/
+        ${CMAKE_CURRENT_BINARY_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/include/QtHttpServer
+)
+
+set_target_properties(
+  QtHttpServer
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY
+        ${BIN_OUTPUT_DIRECTORY}
 )
 
 file(GLOB QtHttpServer_HEADERS
@@ -89,13 +100,13 @@ file(GLOB QtHttpServer_private_HEADERS
 
 file(
     COPY ${QtHttpServer_HEADERS}
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/QtHttpServer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtHttpServer/"
 )
 file(
     COPY ${QtHttpServer_private_HEADERS}
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/private/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtHttpServer/private/"
 )
 file(
-    COPY "${CMAKE_CURRENT_SOURCE_DIR}/headers/QtHttpServer"
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/QtHttpServer/"
+    COPY "${CMAKE_CURRENT_SOURCE_DIR}/headers/QtHttpServer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/include/QtHttpServer/"
 )

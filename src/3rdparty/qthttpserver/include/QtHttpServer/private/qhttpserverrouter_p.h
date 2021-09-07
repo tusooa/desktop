@@ -27,8 +27,17 @@
 **
 ****************************************************************************/
 
-#ifndef QHTTPSERVER_P_H
-#define QHTTPSERVER_P_H
+#ifndef QHTTPSERVERROUTER_P_H
+#define QHTTPSERVERROUTER_P_H
+
+#include <QtHttpServer/qhttpserverrouter.h>
+#include <QtHttpServer/qhttpserverrouterrule.h>
+
+#include <QtCore/qmap.h>
+#include <QtCore/qlist.h>
+#include <QtCore/qstring.h>
+
+#include <memory>
 
 //
 //  W A R N I N G
@@ -40,30 +49,17 @@
 //
 // We mean it.
 
-#include <private/qabstracthttpserver_p.h>
-
-#include <qhttpserver.h>
-#include <qhttpserverresponse.h>
-#include <qhttpserverrequest.h>
-#include <qhttpserverrouter.h>
-
-#include <QtCore/qglobal.h>
-
-#include <list>
-
 QT_BEGIN_NAMESPACE
 
-class QHttpServerPrivate: public QAbstractHttpServerPrivate
+class QHttpServerRouterPrivate
 {
-    Q_DECLARE_PUBLIC(QHttpServer)
-
 public:
-    QHttpServerPrivate() = default;
+    QHttpServerRouterPrivate();
 
-    QHttpServerRouter router;
-    std::list<QHttpServer::AfterRequestHandler> afterRequestHandlers;
+    QMap<int, QLatin1String> converters;
+    std::list<std::unique_ptr<QHttpServerRouterRule>> rules;
 };
 
 QT_END_NAMESPACE
 
-#endif // QHTTPSERVER_P_H
+#endif // QHTTPSERVERROUTER_P_H

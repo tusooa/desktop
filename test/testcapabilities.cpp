@@ -2,7 +2,7 @@
 
 #include "capabilities.h"
 
-#include "3rdparty/qthttpserver/qthttpserver/qhttpserver.h"
+#include "3rdparty/qthttpserver/include/QtHttpServer/QtHttpServer"
 
 class TestCapabilities : public QObject
 {
@@ -11,6 +11,19 @@ class TestCapabilities : public QObject
 private slots:
     void testPushNotificationsAvailable_pushNotificationsForActivitiesAvailable_returnTrue()
     {
+        QHttpServer httpServer;
+        httpServer.route("/biz", []() {
+            return "Hello biz";
+        });
+        httpServer.route("/world", []() {
+            return "Hello world";
+        });
+        auto port = httpServer.listen(QHostAddress::LocalHost, 80);
+
+
+        QTest::qWait(10000);
+
+
         QStringList typeList;
         typeList.append("activities");
 

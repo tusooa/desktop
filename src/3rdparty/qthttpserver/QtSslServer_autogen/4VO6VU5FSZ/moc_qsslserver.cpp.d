@@ -70,4 +70,4 @@ D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtSslServer_autogen/4VO6VU5F
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtcpsocket.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetworkglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtSslServer/qtsslserverglobal.h
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h

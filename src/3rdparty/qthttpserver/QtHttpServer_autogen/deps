@@ -242,21 +242,20 @@ QtHttpServer_autogen/timestamp: \
 	D:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake \
 	D:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/CMakeLists.txt \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtSslServer/qsslserver.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qsslserver.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qtsslserverglobal.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/private/qabstracthttpserver_p.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/private/qhttpserverresponse_p.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qabstracthttpserver.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrequest.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponder.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponse.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouter.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouterrule.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouterviewtraits.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverviewtraits.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverviewtraits_impl.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qthttpserverglobal.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/private/qabstracthttpserver_p.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/private/qhttpserverresponse_p.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qabstracthttpserver.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrequest.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponder.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponse.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouter.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouterrule.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouterviewtraits.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverviewtraits.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverviewtraits_impl.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qthttpserverglobal.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qsslserver.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/3rdparty/http-parser/http_parser.c \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/3rdparty/http-parser/http_parser.h \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qabstracthttpserver.cpp \
@@ -284,6 +283,4 @@ QtHttpServer_autogen/timestamp: \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverrouterrule.cpp \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverrouterrule.h \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverrouterrule_p.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverrouterviewtraits.h \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qthttpserverglobal.h \
 	D:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe

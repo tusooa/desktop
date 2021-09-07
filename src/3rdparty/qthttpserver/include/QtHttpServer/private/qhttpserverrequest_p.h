@@ -30,7 +30,7 @@
 #ifndef QHTTPSERVERREQUEST_P_H
 #define QHTTPSERVERREQUEST_P_H
 
-#include <qhttpserverrequest.h>
+#include <QtHttpServer/qhttpserverrequest.h>
 
 #include <QtCore/qbytearray.h>
 #include <QtCore/qpair.h>

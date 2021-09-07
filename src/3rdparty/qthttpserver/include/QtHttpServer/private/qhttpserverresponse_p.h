@@ -27,47 +27,50 @@
 **
 ****************************************************************************/
 
-#ifndef QHTTPSERVERRESPONDER_P_H
-#define QHTTPSERVERRESPONDER_P_H
-
-#include "qthttpserverglobal.h"
-#include <qhttpserverrequest.h>
-#include <qhttpserverresponder.h>
-
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qpointer.h>
-#include <QtCore/qsysinfo.h>
-
-#include <type_traits>
+#ifndef QHTTPSERVERRESPONSE_P_H
+#define QHTTPSERVERRESPONSE_P_H
 
 //
 //  W A R N I N G
 //  -------------
 //
 // This file is not part of the Qt API.  It exists for the convenience
-// of QHttpServer. This header file may change from version to
+// of QHttpServerResponse. This header file may change from version to
 // version without notice, or even be removed.
 //
 // We mean it.
 
+#include <private/qabstracthttpserver_p.h>
+
+#include <QtHttpServer/qhttpserverresponse.h>
+
+#include <functional>
+#include <unordered_map>
+
 QT_BEGIN_NAMESPACE
 
-class QHttpServerResponderPrivate
+class QHttpServerResponsePrivate
 {
-public:
-    QHttpServerResponderPrivate(const QHttpServerRequest &request, QTcpSocket *const socket)
-        : request(request), socket(socket) {}
+    struct HashHelper {
+        std::size_t operator()(const QByteArray& key) const
+        {
+            return qHash(key.toLower());
+        }
+    };
 
-    const QHttpServerRequest &request;
-#if defined(QT_DEBUG)
-    const QPointer<QTcpSocket> socket;
-#else
-    QTcpSocket *const socket;
-#endif
-    bool bodyStarted{false};
+public:
+    explicit QHttpServerResponsePrivate() = default;
+    virtual ~QHttpServerResponsePrivate() = default;
+
+    QHttpServerResponsePrivate(QByteArray &&d, const QHttpServerResponse::StatusCode sc);
+    QHttpServerResponsePrivate(const QHttpServerResponse::StatusCode sc);
+
+    QByteArray data;
+    QHttpServerResponse::StatusCode statusCode;
+    std::unordered_multimap<QByteArray, QByteArray, HashHelper> headers;
+    bool derived{false};
 };
 
 QT_END_NAMESPACE
 
-#endif // QHTTPSERVERRESPONDER_P_H
+#endif // QHTTPSERVERRESPONSE_P_H

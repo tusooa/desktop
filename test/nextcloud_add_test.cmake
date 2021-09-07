@@ -15,6 +15,7 @@ macro(nextcloud_add_test test_class)
       cmdCore
       Qt5::Test
       Qt5::Quick
+      QtHttpServer
     )
 
     if (WIN32)
@@ -45,6 +46,7 @@ macro(nextcloud_add_test test_class)
         PRIVATE
         "${CMAKE_SOURCE_DIR}/test/"
         ${CMAKE_SOURCE_DIR}/src/3rdparty/qtokenizer
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/qthttpserver/include/
         )
     set_target_properties(${OWNCLOUD_TEST_CLASS}Test PROPERTIES FOLDER Tests)
 endmacro()

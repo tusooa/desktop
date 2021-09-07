@@ -77,17 +77,15 @@ D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtHttpServer_autogen/MPOZ4OR
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtcpsocket.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetwork-config.h \
   D:/Qt/5.15.2/msvc2019_64/include/QtNetwork/qtnetworkglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtHttpServer/qabstracthttpserver.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtHttpServer/qthttpserverglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qsslserver.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/QtSslServer/qtsslserverglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrequest.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponder.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverresponse.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouter.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouterrule.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverrouterviewtraits.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverviewtraits.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qhttpserverviewtraits_impl.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/qthttpserverglobal.h \
-  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/httpserver/qhttpserverrouterviewtraits.h
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qabstracthttpserver.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrequest.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponder.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverresponse.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouter.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouterrule.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverrouterviewtraits.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverviewtraits.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qhttpserverviewtraits_impl.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtHttpServer/qthttpserverglobal.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qsslserver.h \
+  D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h

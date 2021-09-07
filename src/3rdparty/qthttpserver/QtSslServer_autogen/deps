@@ -80,7 +80,7 @@ QtSslServer_autogen/timestamp: \
 	D:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake \
 	D:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/CMakeLists.txt \
-	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/QtSslServer/qtsslserverglobal.h \
+	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/include/QtSslServer/qtsslserverglobal.h \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/sslserver/qsslserver.cpp \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/sslserver/qsslserver.h \
 	D:/work/nextcloud/desktop/src/3rdparty/qthttpserver/qthttpserver/src/sslserver/qsslserver_p.h \
