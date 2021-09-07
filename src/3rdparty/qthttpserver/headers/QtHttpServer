@@ -1,0 +1,10 @@
+#ifndef QT_QTHTTPSERVER_MODULE_H
+#include "qthttpserverglobal.h"
+#include "qhttpserverrouter.h"
+#include "qhttpserverrouterrule.h"
+#include "qhttpserverresponse.h"
+#include "qhttpserverrouterviewtraits.h"
+#include "qhttpserverviewtraits.h"
+#include "qhttpserver.h"
+#include "qabstracthttpserver.h"
+#endif
