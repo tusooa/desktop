@@ -60,6 +60,7 @@ nextcloud_add_test(Theme)
 nextcloud_add_test(IconUtils)
 nextcloud_add_test(NotificationCache)
 
+
 if( UNIX AND NOT APPLE )
     nextcloud_add_test(InotifyWatcher)
 endif(UNIX AND NOT APPLE)
@@ -90,3 +91,5 @@ if (CMOCKA_FOUND)
     include(AddCMockaTest)
     add_subdirectory(csync)
 endif (CMOCKA_FOUND)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/3rdparty/qthttpserver ${CMAKE_SOURCE_DIR}/src/3rdparty/qthttpserver)

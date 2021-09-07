@@ -2,6 +2,8 @@
 
 #include "capabilities.h"
 
+#include "3rdparty/qthttpserver/qthttpserver/qhttpserver.h"
+
 class TestCapabilities : public QObject
 {
     Q_OBJECT
